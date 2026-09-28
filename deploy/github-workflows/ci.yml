@@ -1,6 +1,19 @@
 # =============================================================================
 # BingWLP — CI (GitHub Actions)
 # =============================================================================
+# INSTALLAZIONE: copiare questo file in `.github/workflows/ci.yml` del repository
+# e committarlo con un token/utente che abbia il permesso `workflows`:
+#
+#   mkdir -p .github/workflows
+#   cp deploy/github-workflows/ci.yml .github/workflows/ci.yml
+#   git add .github/workflows/ci.yml && git commit -m 'ci: workflow GitHub Actions'
+#
+# Perché è qui e non già in `.github/workflows/`: il token GitHub App usato per
+# il primo push di questo branch non ha il permesso `workflows` (GitHub rifiuta
+# la creazione di file in `.github/workflows/`), quindi il file resta in un
+# percorso neutro, pronto da spostare a mano. Da GitHub Actions non cambia nulla:
+# il contenuto è quello definitivo.
+#
 # Obiettivo: la stessa sequenza che si esegue a mano prima di un deploy
 # (`npm run ci` dalla root: typecheck → build → test).
 # Node 20 è la versione di produzione (.nvmrc = 20, engines: >=20.11).

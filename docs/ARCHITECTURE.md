@@ -87,7 +87,7 @@ Browser ──GET /api/download?theme=travel&i=0&res=3840x2160──▶ nginx �
 ├── deploy/                 # Dockerfile, compose, nginx, systemd, logrotate, env di esempio
 ├── docs/                   # API.md (contratto), ARCHITECTURE.md, DEPLOY.md
 ├── scripts/                # install-ubuntu.sh, deploy.sh
-└── .github/workflows/      # CI
+└── deploy/                 # nginx, systemd, Docker, CI (deploy/github-workflows/ci.yml)
 ```
 
 ## Convenzioni di codice

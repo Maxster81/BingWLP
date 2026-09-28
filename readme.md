@@ -127,6 +127,9 @@ sudo certbot --nginx -d wallpaper.example.com  # HTTPS
 Artefatti pronti in [`deploy/`](deploy): `nginx/bingwlp.conf`, `systemd/bingwlp.service`,
 `Dockerfile`, `docker-compose.yml`, `logrotate/bingwlp`, `bingwlp.env.example`.
 
+La CI GitHub Actions è in `deploy/github-workflows/ci.yml`: copiala in `.github/workflows/ci.yml`
+(il token usato per questo branch non ha il permesso `workflows` per crearla da solo).
+
 ## Struttura del progetto
 
 ```
