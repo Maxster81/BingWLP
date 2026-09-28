@@ -1,0 +1,167 @@
+# =============================================================================
+# BingWLP — unit systemd del backend (Ubuntu 22.04 / 24.04)
+# =============================================================================
+#
+# Installazione:
+#   sudo install -m 0644 deploy/systemd/bingwlp.service /etc/systemd/system/bingwlp.service
+#   sudo install -m 0640 -o root -g bingwlp deploy/bingwlp.env.example /etc/bingwlp/bingwlp.env
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now bingwlp
+#
+# Questo file è pensato per il layout SEMPLICE NON-ATOMICO: il repository è
+# clonato direttamente in /opt/bingwlp e il deploy aggiorna i file in place.
+# Per il deploy ATOMICO (release per timestamp + symlink `current`) si installa
+# anche il drop-in:
+#   sudo install -m 0644 deploy/systemd/bingwlp.service.d/10-release.conf \
+#        /etc/systemd/system/bingwlp.service.d/10-release.conf
+# che sposta WorkingDirectory su /opt/bingwlp/current.
+#
+# PATH DI RIFERIMENTO
+#   /opt/bingwlp                 root del deploy (repo, o `current` symlink)
+#   /etc/bingwlp/bingwlp.env     variabili d'ambiente (EnvironmentFile)
+#   /var/lib/bingwlp             UNICA directory scrivibile dal servizio
+#   /var/www/bingwlp/web/dist    statico servito da nginx (il servizio non lo tocca)
+#
+# LOG: questa unit logga nel JOURNAL systemd (default: StandardOutput/Error
+# non dichiarati ⇒ `journal`).
+# PERCHÉ IL JOURNAL E NON UN FILE:
+#   - rotazione e retention automatiche (journald), nessun logrotate necessario;
+#   - log strutturati di pino correlati al servizio (journalctl -u bingwlp -o json);
+#   - rate limiting integrato contro i flood;
+#   - niente permessi/ownership da gestire su /var/log.
+# Se preferite i file puri (regola logrotate settimanale fornita in
+# deploy/logrotate/bingwlp), decommentate le righe `StandardOutput/Error=append:`
+# indicate più sotto.
+# =============================================================================
+
+[Unit]
+Description=BingWLP — backend Fastify (Bing Wallpaper clone)
+Documentation=https://github.com/Maxster81/BingWLP
+# network-online.target garantisce la NIC configurata: il backend deve poter
+# raggiungere services.bingapis.com al primo giro di cache.
+Wants=network-online.target
+After=network-online.target
+
+
+[Service]
+Type=simple
+
+# ---------------------------------------------------------------------------
+# Identità e cwd
+# ---------------------------------------------------------------------------
+# Utente di sistema creato da scripts/install-ubuntu.sh (niente login, no home reale).
+User=bingwlp
+Group=bingwlp
+
+# WorkingDirectory: le env con path RELATIVI (es. IMAGE_STORE_DIR=./data/images)
+# e le risoluzioni di default di @fastify/static (STATIC_DIR=../web/dist)
+# partono da qui. Con il drop-in atomico diventa /opt/bingwlp/current.
+WorkingDirectory=/opt/bingwlp
+
+# Variabili documentate in docs/API.md + server/.env.example.
+# Il file NON è uno script shell: solo CHIAVE=valore (systemd non fa espansione).
+# Il `-` davanti al percorso renderebbe l'assenza non fatale: qui NON lo mettiamo,
+# così un deploy senza env configurate fallisce subito e in modo visibile.
+EnvironmentFile=/etc/bingwlp/bingwlp.env
+
+# Eseguibile assoluto: nessuna dipendenza dal PATH (systemd usa un PATH minimo).
+# `server/dist/index.js` è il bundle prodotto da tsup (`npm run build` dalla root).
+ExecStart=/usr/bin/node server/dist/index.js
+
+# ---------------------------------------------------------------------------
+# Riavvio e arresto
+# ---------------------------------------------------------------------------
+# always: riparte sia dopo crash sia dopo stop per errore. Un crash-loop è
+# frenato da RestartSec e dalle protezioni di systemd (start-limit).
+Restart=always
+RestartSec=3
+
+# Node gestisce SIGINT/SIGTERM con graceful shutdown (app.close(): smette di
+# accettare connessioni, chiude quelle in volo). SIGTERM è il signal giusto
+# perché systemd lo invia all'intero cgroup del servizio.
+KillSignal=SIGTERM
+# Tempo concesso prima del SIGKILL di systemd: 20s abbondanti, il backend è
+# stateless (nessuna transazione da committare).
+TimeoutStopSec=20
+# Tempo concesso all'avvio prima di considerarlo fallito.
+TimeoutStartSec=30
+
+# ---------------------------------------------------------------------------
+# Hardening (principio del minimo privilegio)
+# ---------------------------------------------------------------------------
+# Nessun privilegio acquisibile (no setuid/setgid, no file capability).
+NoNewPrivileges=true
+
+# /tmp e /var/tmp privati: evita symlink attack via /tmp e impedisce di vedere
+# i tempfile degli altri servizi.
+PrivateTmp=true
+
+# Filesystem di sistema in SOLA LETTURA (tutto è read-only per il servizio,
+# salvo eccezioni): Node legge ancora /opt/bingwlp, /etc/bingwlp/bingwlp.env,
+# /usr/lib/node_modules.
+ProtectSystem=strict
+
+# /home, /root e /run/user invisibili al processo.
+ProtectHome=true
+
+# Eccezione in scrittura: l'UNICA directory scrivibile. I log vanno su journal,
+# quindi qui finirà solo l'eventuale image store futuro
+# (IMAGE_STORE_DIR=/var/lib/bingwlp/images).
+ReadWritePaths=/var/lib/bingwlp
+
+# Hardening aggiuntivo di kernel e namespace.
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+ProtectKernelLogs=true
+RestrictNamespaces=true
+LockPersonality=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+ProtectClock=true
+ProtectHostname=true
+
+# Solo IPv4/IPv6: il backend non usa socket AF_UNIX né netlink.
+RestrictAddressFamilies=AF_INET AF_INET6
+
+# Capability: NESSUNA. Il processo ascolta sulla 8080 (>1024), quindi non serve
+# CAP_NET_BIND_SERVICE; non usa capability di alcun tipo. I set vuoti sono più
+# severi di `CapabilityBoundingSet=default`: qualunque capability richiesta in
+# futuro fa fallire l'operazione invece di passare in silenzio.
+AmbientCapabilities=
+CapabilityBoundingSet=
+
+# NB: NON impostiamo MemoryDenyWriteExecute=true. Node compila codice a runtime
+# (JIT di V8): un mapping W+X è normale e verrebbe bloccato, facendo crashare il
+# processo all'avvio. Ha senso solo per runtime senza JIT.
+# NB2: SystemCallFilter=@system-service è di solito compatibile con Node, ma può
+# rompere moduli nativi o aggiornamenti di V8. Lasciato commentato come opzione
+# da provare sotto test di carico:
+# SystemCallFilter=@system-service
+# SystemCallErrorNumber=EPERM
+
+# ---------------------------------------------------------------------------
+# Risorse
+# ---------------------------------------------------------------------------
+# Il backend apre molte connessioni verso Bing + i socket client: alziamo il
+# limite di file descriptor ben oltre il default (1024).
+LimitNOFILE=65535
+
+# Limiti di memoria: soft = pressione senza kill, hard = kill. Le immagini NON
+# sono bufferizzate in massa (redirect 302 / streaming), la cache byte è
+# best-effort. 2G hard copre CACHE_IMAGE_BYTES=2GiB: allineare se la cambiate.
+MemoryHigh=1536M
+MemoryMax=2G
+
+# ---------------------------------------------------------------------------
+# Log (vedi nota in testa al file)
+# ---------------------------------------------------------------------------
+# Modalità JOURNAL (attiva): nessuna direttiva = default `journal`.
+# Modalità FILE (opzionale, richiede deploy/logrotate/bingwlp):
+#StandardOutput=append:/var/log/bingwlp/bingwlp.log
+#StandardError=append:/var/log/bingwlp/bingwlp.log
+SyslogIdentifier=bingwlp
+
+[Install]
+# `systemctl enable bingwlp` crea il symlink in multi-user.target.wants.
+WantedBy=multi-user.target

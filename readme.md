@@ -73,6 +73,25 @@ npm start                          # avvia il backend (serve anche web/dist se S
 Se il frontend in dev non è collegato al backend, la pagina mostra gli stati di caricamento/errore
 con il pulsante "Riprova".
 
+## Test
+
+```bash
+npm test        # 161 test (90 backend + 71 frontend), nessuna rete richiesta
+```
+
+Il backend viene testato con un client Bing **finto e iniettato** (`buildApp`): i test non toccano la
+rete e girano anche offline. C'è anche un test di integrazione **live** (opt-in) che renderizza l'app
+vera contro un backend reale ed esercita griglia → carosello → lightbox e il percorso di download:
+
+```bash
+npm run build
+PORT=8099 SERVE_STATIC=true node server/dist/index.js &
+LIVE_API_URL=http://127.0.0.1:8099 npm run test --workspace web
+```
+
+Senza `LIVE_API_URL` quel test viene saltato automaticamente.
+
+
 ## Configurazione
 
 Il backend legge le variabili d'ambiente (nessun file obbligatorio in sviluppo):

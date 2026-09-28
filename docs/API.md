@@ -119,7 +119,7 @@ Configurazione statica per il frontend (una chiamata all'avvio).
 {
   "defaultMarket": "it-IT",
   "markets": [ { "code": "it-IT", "name": "Italiano (Italia)", "flag": "🇮🇹" } ],
-  "resolutions": [ { "key": "1920x1080", "label": "Full HD (1920×1080)", "group": "desktop", "width": 1920, "height": 1080, "aspect": "16:9", "recommended": true } ],
+  "resolutions": [ { "key": "1920x1080", "label": "Full HD 16:9 · 1920×1080", "group": "desktop", "width": 1920, "height": 1080, "aspect": "16:9", "recommended": true } ],
   "defaultResolution": "1920x1080",
   "limits": { "maxWidth": 8000, "maxHeight": 8000 },
   "cacheTtlSec": { "themes": 21600, "images": 3600 }

@@ -1,0 +1,48 @@
+# =============================================================================
+# BingWLP — rotazione dei log del backend
+# =============================================================================
+# Installazione:
+#   sudo install -m 0644 deploy/logrotate/bingwlp /etc/logrotate.d/bingwlp
+# Verifica della sintassi senza toccare i file:
+#   sudo logrotate --debug /etc/logrotate.d/bingwlp
+# Rotazione forzata (test):
+#   sudo logrotate --force --verbose /etc/logrotate.d/bingwlp
+#
+# NOTA IMPORTANTE: la unit systemd di riferimento (deploy/systemd/bingwlp.service)
+# logga nel JOURNAL (journald), NON su file. In quella modalità questa regola
+# non ha nulla da ruotare: `missingok` la rende innocua e i log restano gestiti
+# da journald (limiti in /etc/systemd/journald.conf, `journalctl --vacuum-time`).
+# Questa regola diventa operativa solo se si passa alla modalità file, cioè se
+# nella unit si sostituiscono le righe journal con:
+#   StandardOutput=append:/var/log/bingwlp/bingwlp.log
+#   StandardError=append:/var/log/bingwlp/bingwlp.log
+# =============================================================================
+
+/var/log/bingwlp/*.log {
+    # Una volta a settimana (weekly), con 8 rotazioni conservate => ~2 mesi di storico.
+    weekly
+    rotate 8
+
+    # Comprime le rotazioni passate; `delaycompress` rimanda la compressione di
+    # un ciclo così il processo può ancora finire di scrivere sul file appena ruotato.
+    compress
+    delaycompress
+
+    # Non è un errore se la cartella/file non esiste (caso journald).
+    missingok
+
+    # Non ruotare file vuoti.
+    notifempty
+
+    # copytruncate: copia il contenuto e poi TRONCA il file originale.
+    # Serve perché il backend NON ha un handler di riapri-log (SIGHUP): con
+    # append:/ di systemd il file descriptor resta aperto sul vecchio inode e
+    # senza copytruncate si perderebbero i log scritti dopo la rotazione.
+    copytruncate
+
+    # Log vuoti con permessi sensati e proprietario del servizio.
+    create 0640 bingwlp bingwlp
+
+    # Permessi applicati anche alla cartella padre, se creata.
+    su bingwlp bingwlp
+}

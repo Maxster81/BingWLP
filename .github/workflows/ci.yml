@@ -1,0 +1,55 @@
+# =============================================================================
+# BingWLP — CI (GitHub Actions)
+# =============================================================================
+# Obiettivo: la stessa sequenza che si esegue a mano prima di un deploy
+# (`npm run ci` dalla root: typecheck → build → test).
+# Node 20 è la versione di produzione (.nvmrc = 20, engines: >=20.11).
+# I test NON toccano la rete: il client Bing è sostituito da fake (fastify.inject).
+# =============================================================================
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Annulla le run precedenti sullo stesso ref: risparmia minuti di CI.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+# Permessi minimi del token.
+permissions:
+  contents: read
+
+jobs:
+  build-test:
+    name: typecheck + build + test (Node 20)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 20 con cache npm
+        uses: actions/setup-node@v4
+        with:
+          # `.nvmrc` contiene "20" (uppercase-free): usiamo node-version-file
+          # così la CI segue automaticamente la versione dichiarata nel repo.
+          node-version-file: .nvmrc
+          # La cache è chiavata sul package-lock.json della root (npm workspaces).
+          cache: npm
+
+      - name: Install (npm ci, workspaces)
+        run: npm ci
+
+      - name: Typecheck (server + web)
+        run: npm run typecheck
+
+      - name: Build (web → web/dist, server → server/dist/index.js)
+        run: npm run build
+
+      - name: Test (server + web)
+        run: npm test
