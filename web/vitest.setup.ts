@@ -13,3 +13,7 @@ if (!window.matchMedia) {
     dispatchEvent: () => false,
   })) as unknown as typeof window.matchMedia;
 }
+
+// jsdom non implementa lo scroll: polyfill no-op per non sporcare l'output dei test.
+window.scrollTo = ((): void => {}) as typeof window.scrollTo;
+Element.prototype.scrollIntoView = function scrollIntoView(): void {};

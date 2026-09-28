@@ -1,0 +1,8 @@
+/* ErrorState — varianti specifiche dell'errore.
+   Le regole base `.bwp-state*` vivono in `styles/base.css` (primitive condivise). */
+
+.bwp-state__icon--error {
+  color: var(--bwp-danger);
+  background: var(--bwp-danger-bg);
+  border-color: rgba(251, 113, 133, 0.3);
+}

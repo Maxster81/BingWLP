@@ -1,0 +1,202 @@
+.bwp-detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bwp-space-5);
+}
+
+/* --- Breadcrumb --- */
+.bwp-detail__breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--bwp-space-2);
+  font-size: var(--bwp-font-size-xs);
+  color: var(--bwp-text-muted);
+}
+
+.bwp-detail__crumb-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--bwp-radius-pill);
+  border: 1px solid var(--bwp-border);
+  color: var(--bwp-text-soft);
+  transition: background-color var(--bwp-dur) var(--bwp-ease), border-color var(--bwp-dur) var(--bwp-ease);
+}
+
+.bwp-detail__crumb-link:hover {
+  background: var(--bwp-surface);
+  border-color: var(--bwp-border-accent);
+}
+
+.bwp-detail__crumb-sep {
+  display: grid;
+  place-items: center;
+  color: var(--bwp-text-dim);
+}
+
+.bwp-detail__crumb-current {
+  font-weight: 600;
+  color: var(--bwp-text);
+}
+
+/* --- Intestazione --- */
+.bwp-detail__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bwp-space-3);
+}
+
+.bwp-detail__title {
+  font-size: var(--bwp-font-size-2xl);
+  background-image: linear-gradient(120deg, #ffffff 20%, #bae6fd 55%, #f9a8d4 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.bwp-detail__badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--bwp-space-2);
+}
+
+.bwp-detail__count {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--bwp-space-2);
+  font-size: var(--bwp-font-size-xs);
+  color: var(--bwp-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.bwp-detail__subtitle {
+  color: var(--bwp-text-muted);
+  font-size: var(--bwp-font-size-sm);
+}
+
+/* --- Viewer --- */
+.bwp-detail__viewer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bwp-space-2);
+}
+
+.bwp-detail__loading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bwp-space-3);
+}
+
+.bwp-detail__loading-strip {
+  display: flex;
+  gap: var(--bwp-space-2);
+  overflow: hidden;
+}
+
+/* --- Info + pannello --- */
+.bwp-detail__info {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--bwp-space-5);
+  padding: var(--bwp-space-5);
+  border-radius: var(--bwp-radius-lg);
+  border: 1px solid var(--bwp-border);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.012));
+  box-shadow: var(--bwp-shadow-md);
+}
+
+.bwp-detail__info-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bwp-space-3);
+  min-width: 0;
+}
+
+.bwp-detail__info-title {
+  font-size: var(--bwp-font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--bwp-text-dim);
+}
+
+.bwp-detail__info-name {
+  font-size: var(--bwp-font-size-lg);
+}
+
+.bwp-detail__info-description {
+  color: var(--bwp-text-muted);
+  font-size: var(--bwp-font-size-sm);
+}
+
+.bwp-detail__facts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bwp-space-3);
+  margin: 0;
+}
+
+.bwp-detail__fact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.bwp-detail__fact dt {
+  font-size: var(--bwp-font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--bwp-text-dim);
+}
+
+.bwp-detail__fact dd {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--bwp-space-2);
+  margin: 0;
+  font-size: var(--bwp-font-size-sm);
+  color: var(--bwp-text-soft);
+}
+
+.bwp-detail__external {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--bwp-accent-1);
+  font-weight: 600;
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--bwp-dur) var(--bwp-ease);
+}
+
+.bwp-detail__external:hover {
+  border-color: currentColor;
+}
+
+.bwp-detail__tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--bwp-space-2);
+}
+
+.bwp-detail__panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bwp-space-3);
+  align-content: start;
+}
+
+.bwp-detail__animated {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--bwp-space-2);
+}
+
+@media (min-width: 900px) {
+  .bwp-detail__info {
+    grid-template-columns: minmax(0, 1.6fr) minmax(280px, 1fr);
+  }
+}

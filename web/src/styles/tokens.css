@@ -1,0 +1,99 @@
+/* BingWLP — design tokens
+   Palette dark "aurora" con accenti gradiente blu → viola → rosa. */
+
+:root {
+  color-scheme: dark;
+
+  /* --- Superfici --- */
+  --bwp-bg: #060915;
+  --bwp-bg-soft: #0a0f20;
+  --bwp-bg-elev: #101732;
+  --bwp-bg-glass: rgba(10, 15, 32, 0.72);
+  --bwp-glass-blur: 18px;
+  --bwp-surface: rgba(255, 255, 255, 0.045);
+  --bwp-surface-strong: rgba(255, 255, 255, 0.08);
+  --bwp-surface-hover: rgba(255, 255, 255, 0.1);
+  --bwp-surface-sunken: rgba(0, 0, 0, 0.28);
+
+  /* --- Bordi --- */
+  --bwp-border: rgba(255, 255, 255, 0.09);
+  --bwp-border-strong: rgba(255, 255, 255, 0.18);
+  --bwp-border-accent: rgba(129, 140, 248, 0.55);
+
+  /* --- Testo --- */
+  --bwp-text: #eef2ff;
+  --bwp-text-soft: #cdd5f0;
+  --bwp-text-muted: #9aa6c9;
+  --bwp-text-dim: #727fa6;
+
+  /* --- Accenti --- */
+  --bwp-accent-1: #38bdf8;
+  --bwp-accent-2: #818cf8;
+  --bwp-accent-3: #f472b6;
+  --bwp-accent: #818cf8;
+  --bwp-accent-contrast: #080c1a;
+  --bwp-gradient-aurora: linear-gradient(120deg, #38bdf8 0%, #818cf8 48%, #f472b6 100%);
+  --bwp-gradient-soft: linear-gradient(140deg, rgba(56, 189, 248, 0.16), rgba(129, 140, 248, 0.14) 50%, rgba(244, 114, 182, 0.16));
+
+  /* --- Stati --- */
+  --bwp-danger: #fb7185;
+  --bwp-danger-bg: rgba(251, 113, 133, 0.12);
+  --bwp-success: #34d399;
+  --bwp-warning: #fbbf24;
+
+  /* --- Spacing (scala 4px) --- */
+  --bwp-space-1: 0.25rem;
+  --bwp-space-2: 0.5rem;
+  --bwp-space-3: 0.75rem;
+  --bwp-space-4: 1rem;
+  --bwp-space-5: 1.5rem;
+  --bwp-space-6: 2rem;
+  --bwp-space-7: 3rem;
+  --bwp-space-8: 4rem;
+  --bwp-space-9: 6rem;
+
+  /* --- Radii --- */
+  --bwp-radius-xs: 6px;
+  --bwp-radius-sm: 10px;
+  --bwp-radius-md: 14px;
+  --bwp-radius-lg: 20px;
+  --bwp-radius-xl: 28px;
+  --bwp-radius-pill: 999px;
+
+  /* --- Ombre --- */
+  --bwp-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --bwp-shadow-md: 0 10px 30px -12px rgba(0, 0, 0, 0.7);
+  --bwp-shadow-lg: 0 28px 60px -22px rgba(0, 0, 0, 0.8);
+  --bwp-shadow-glow: 0 12px 40px -14px rgba(129, 140, 248, 0.65);
+
+  /* --- Tipografia fluida --- */
+  --bwp-font-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  --bwp-font-size-xs: clamp(0.72rem, 0.7rem + 0.1vw, 0.78rem);
+  --bwp-font-size-sm: clamp(0.82rem, 0.8rem + 0.15vw, 0.9rem);
+  --bwp-font-size-md: clamp(0.95rem, 0.9rem + 0.25vw, 1.05rem);
+  --bwp-font-size-lg: clamp(1.1rem, 1rem + 0.5vw, 1.35rem);
+  --bwp-font-size-xl: clamp(1.4rem, 1.15rem + 1.1vw, 2rem);
+  --bwp-font-size-2xl: clamp(1.9rem, 1.4rem + 2.4vw, 3.1rem);
+  --bwp-font-size-3xl: clamp(2.4rem, 1.6rem + 3.4vw, 4.2rem);
+  --bwp-line-tight: 1.15;
+  --bwp-line-normal: 1.55;
+
+  /* --- Layout --- */
+  --bwp-container: 1320px;
+  --bwp-container-narrow: 960px;
+  --bwp-header-h: 68px;
+
+  /* --- Transizioni --- */
+  --bwp-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --bwp-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --bwp-dur-fast: 140ms;
+  --bwp-dur: 240ms;
+  --bwp-dur-slow: 420ms;
+
+  --bwp-z-header: 40;
+  --bwp-z-dropdown: 60;
+  --bwp-z-lightbox: 90;
+  --bwp-z-toast: 120;
+
+  --bwp-focus-ring: 0 0 0 2px var(--bwp-bg), 0 0 0 4px var(--bwp-accent-1);
+}

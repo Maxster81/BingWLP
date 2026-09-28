@@ -1,0 +1,26 @@
+.bwp-skeleton {
+  display: block;
+  border-radius: var(--bwp-radius-sm);
+  background-color: rgba(255, 255, 255, 0.06);
+  background-image: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0.04) 20%,
+    rgba(255, 255, 255, 0.14) 42%,
+    rgba(56, 189, 248, 0.18) 50%,
+    rgba(255, 255, 255, 0.14) 58%,
+    rgba(255, 255, 255, 0.04) 80%
+  );
+  background-size: 220% 100%;
+  background-repeat: no-repeat;
+  animation: bwp-shimmer 1.5s var(--bwp-ease) infinite;
+}
+
+.bwp-skeleton--image {
+  border-radius: var(--bwp-radius-md);
+}
+
+.bwp-text-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bwp-space-2);
+}
