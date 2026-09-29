@@ -2,11 +2,11 @@
 # =============================================================================
 # BingWLP — install-ubuntu.sh
 # =============================================================================
-# Prepara un server Ubuntu 22.04 / 24.04 PULITO per il deploy di BingWLP con
+# Prepara un server Ubuntu LTS recente PULITO (testato: 22.04 / 24.04 / 26.04)
 # nginx + systemd (la variante Docker non richiede questo script).
 #
 # COSA FA (tutto IDEMPOTENTE: si può rieseguire senza danni)
-#   1. controlla root e che l'OS sia Ubuntu 22.04/24.04
+#   1. controlla root e che l'OS sia una Ubuntu LTS supportata
 #   2. apt update + pacchetti base: nginx, curl, ca-certificates, gnupg, git, logrotate
 #   3. installa Node.js 20 LTS dal repository NodeSource
 #   4. crea l'utente di sistema `bingwlp` e le cartelle di deploy
@@ -106,8 +106,10 @@ step "Controllo prerequisiti"
 . /etc/os-release
 [[ "${ID:-}" == "ubuntu" ]] || die "distribuzione non supportata: atteso Ubuntu, trovato '${ID:-?}'"
 case "${VERSION_ID:-}" in
-  22.04 | 24.04) ok "Ubuntu ${VERSION_ID} (${PRETTY_NAME:-})" ;;
-  *) warn "Ubuntu ${VERSION_ID:-sconosciuta} non testata (supporto dichiarato: 22.04/24.04)" ;;
+  # Versioni esplicitamente testate. La procedura e' generica (apt, NodeSource
+  # nodistro, systemd): su altre Ubuntu LTS recenti si prosegue con un warning.
+  22.04 | 24.04 | 26.04) ok "Ubuntu ${VERSION_ID} (${PRETTY_NAME:-})" ;;
+  *) warn "Ubuntu ${VERSION_ID:-sconosciuta} non testata esplicitamente (testate: 22.04/24.04/26.04); si prosegue comunque" ;;
 esac
 
 # apt non interattivo: nessuna domanda su file di configurazione modificati,

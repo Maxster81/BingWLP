@@ -1,7 +1,8 @@
 # Deploy di BingWLP su Ubuntu
 
 Guida operativa, copia-incollabile, per mettere in produzione **BingWLP** (backend
-Node/Fastify + frontend React/Vite) su un server **Ubuntu 22.04 LTS** o **24.04 LTS** pulito.
+Node/Fastify + frontend React/Vite) su un server **Ubuntu LTS** pulito
+(testata su 22.04, 24.04 e 26.04; la procedura è generica e vale per qualunque Ubuntu LTS recente).
 
 Due strade possibili:
 
@@ -119,7 +120,7 @@ resta solo su `/api/*` e `index.html`. In quel caso aggiungete l'host del CDN a
 
 | Requisito | Dettaglio |
 | --------- | --------- |
-| Server | VPS Ubuntu **22.04 LTS** o **24.04 LTS**, 1 vCPU / 1 GB RAM minimo (2 GB comodi per la build) |
+| Server | VPS **Ubuntu LTS** (22.04+, testato fino a 26.04), 1 vCPU / 1 GB RAM minimo (2 GB comodi per la build) |
 | Disco | ≥ 10 GB liberi |
 | Accesso | utente con `sudo` (o root) via SSH |
 | DNS | record **A** (e **AAAA** se IPv6) `wallpaper.example.com` → IP del server. Il TLS richiede che il DNS risolva **prima** di lanciare certbot |
@@ -130,7 +131,7 @@ resta solo su `/api/*` e `index.html`. In quel caso aggiungete l'host del CDN a
 Verifica rapida prima di iniziare:
 
 ```bash
-lsb_release -a                        # Ubuntu 22.04 / 24.04
+lsb_release -a                        # Ubuntu LTS (testato: 22.04 / 24.04 / 26.04)
 getent hosts wallpaper.example.com    # deve GIÀ risolvere all'IP di questo server
 free -h && df -h /
 ```
