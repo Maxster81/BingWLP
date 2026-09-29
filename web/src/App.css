@@ -1,0 +1,111 @@
+.bwp-app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.bwp-main {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 1rem + 2vw, 3rem);
+  width: min(100% - 2 * var(--bwp-space-4), var(--bwp-container));
+  margin-inline: auto;
+  padding-block: clamp(1.25rem, 1rem + 2vw, 2.75rem) var(--bwp-space-7);
+}
+
+/* --- Galleria --- */
+.bwp-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bwp-space-5);
+}
+
+.bwp-gallery__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bwp-space-2);
+}
+
+.bwp-gallery__title {
+  font-size: var(--bwp-font-size-xl);
+}
+
+.bwp-gallery__subtitle {
+  color: var(--bwp-text-muted);
+  font-size: var(--bwp-font-size-sm);
+  max-width: 60ch;
+}
+
+.bwp-gallery__count {
+  font-size: var(--bwp-font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--bwp-text-dim);
+}
+
+.bwp-gallery__stale {
+  margin: 0;
+}
+
+/* --- Skeleton di pagina --- */
+.bwp-skeleton-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bwp-space-5);
+}
+
+.bwp-skeleton-page__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--bwp-space-4);
+}
+
+.bwp-skeleton-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bwp-space-3);
+  padding: var(--bwp-space-3);
+  border-radius: var(--bwp-radius-lg);
+  border: 1px solid var(--bwp-border);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+@media (min-width: 560px) {
+  .bwp-skeleton-page__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 900px) {
+  .bwp-skeleton-page__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1240px) {
+  .bwp-skeleton-page__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* --- Footer --- */
+.bwp-footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bwp-space-1);
+  align-items: center;
+  text-align: center;
+  padding: var(--bwp-space-5) var(--bwp-space-4) var(--bwp-space-6);
+  border-top: 1px solid var(--bwp-border);
+  color: var(--bwp-text-dim);
+  font-size: var(--bwp-font-size-xs);
+}
+
+.bwp-footer__note {
+  max-width: 72ch;
+}
+
+.bwp-footer__source {
+  color: var(--bwp-text-muted);
+}

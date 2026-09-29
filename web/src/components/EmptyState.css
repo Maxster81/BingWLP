@@ -1,0 +1,10 @@
+/* EmptyState — varianti specifiche dello stato vuoto.
+   Le regole base `.bwp-state*` vivono in `styles/base.css` (primitive condivise). */
+
+.bwp-state--empty .bwp-state__icon {
+  color: var(--bwp-accent-2);
+}
+
+.bwp-state--empty .bwp-state__title {
+  color: var(--bwp-text-soft);
+}

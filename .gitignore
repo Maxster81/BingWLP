@@ -1,0 +1,41 @@
+# dependencies
+node_modules/
+.pnp/
+.pnp.js
+
+# build output
+dist/
+build/
+*.tsbuildinfo
+.vite/
+
+# logs
+logs/
+*.log
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# env / local config
+.env
+.env.*
+!.env.example
+
+# runtime data (image store, caches)
+data/
+.cache/
+*.sqlite
+*.db
+
+# editors / OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+
+# test / coverage
+coverage/
+.nyc_output/
+test-results/
+playwright-report/

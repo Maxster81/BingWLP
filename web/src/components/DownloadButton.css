@@ -1,0 +1,104 @@
+.bwp-download {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  border-radius: var(--bwp-radius-pill);
+}
+
+.bwp-download__main {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  padding-right: 0.9rem;
+}
+
+.bwp-download__toggle {
+  display: grid;
+  place-items: center;
+  min-width: 40px;
+  padding-inline: 0.4rem;
+  border: 1px solid var(--bwp-border-strong);
+  border-left-color: rgba(0, 0, 0, 0.28);
+  border-top-right-radius: var(--bwp-radius-pill);
+  border-bottom-right-radius: var(--bwp-radius-pill);
+  background: var(--bwp-surface);
+  color: var(--bwp-text);
+  transition: background-color var(--bwp-dur) var(--bwp-ease), border-color var(--bwp-dur) var(--bwp-ease);
+}
+
+.bwp-download__toggle:hover {
+  background: var(--bwp-surface-hover);
+  border-color: var(--bwp-border-accent);
+}
+
+.bwp-download--primary .bwp-download__toggle {
+  border-color: transparent;
+  border-left-color: rgba(8, 12, 26, 0.25);
+  background-image: var(--bwp-gradient-aurora);
+  color: var(--bwp-accent-contrast);
+}
+
+.bwp-download--sm .bwp-download__main,
+.bwp-download--sm .bwp-download__toggle {
+  min-height: 36px;
+  font-size: var(--bwp-font-size-xs);
+}
+
+.bwp-download__menu {
+  position: absolute;
+  z-index: var(--bwp-z-dropdown);
+  top: calc(100% + 0.5rem);
+  right: 0;
+  min-width: 260px;
+  max-height: min(64vh, 460px);
+  overflow-y: auto;
+  padding: var(--bwp-space-3);
+  border-radius: var(--bwp-radius-md);
+  border: 1px solid var(--bwp-border-strong);
+  background: var(--bwp-bg-elev);
+  box-shadow: var(--bwp-shadow-lg);
+  animation: bwp-fade-in var(--bwp-dur-fast) var(--bwp-ease-out) both;
+}
+
+.bwp-download__group + .bwp-download__group {
+  margin-top: var(--bwp-space-2);
+  padding-top: var(--bwp-space-2);
+  border-top: 1px solid var(--bwp-border);
+}
+
+.bwp-download__group-title {
+  margin-bottom: var(--bwp-space-1);
+  font-size: var(--bwp-font-size-xs);
+  font-weight: 700;
+  color: var(--bwp-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.bwp-download__item {
+  display: flex;
+  align-items: center;
+  gap: var(--bwp-space-2);
+  width: 100%;
+  padding: 0.5rem 0.6rem;
+  border-radius: var(--bwp-radius-sm);
+  color: var(--bwp-text-soft);
+  font-size: var(--bwp-font-size-sm);
+  text-align: left;
+  transition: background-color var(--bwp-dur-fast) var(--bwp-ease), color var(--bwp-dur-fast) var(--bwp-ease);
+}
+
+.bwp-download__item:hover {
+  background: var(--bwp-surface-hover);
+  color: var(--bwp-text);
+}
+
+.bwp-download__item-label {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.bwp-download__footer {
+  margin-top: var(--bwp-space-2);
+  padding-top: var(--bwp-space-2);
+  border-top: 1px solid var(--bwp-border);
+}

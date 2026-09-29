@@ -1,0 +1,70 @@
+# =============================================================================
+# BingWLP — .dockerignore (root del repo)
+# =============================================================================
+# Obiettivo: context di build piccolo e layer cache stabile.
+# Il Dockerfile installa le dipendenze da package-lock.json e ricostruisce gli
+# artefatti, quindi TUTTO ciò che è generato/derivato qui dentro è inutile e
+# dannoso (una copia di node_modules dell'host invaliderebbe la cache e
+# potrebbe portare binari nativi sbagliati/pacchetti diversi).
+#
+# Sintassi: pattern stile .gitignore, valutati dalla root del build context.
+# =============================================================================
+
+# --- Dipendenze (reinstallate con `npm ci` nel builder) ---
+node_modules
+**/node_modules
+.pnp
+.pnp.js
+
+# --- Artefatti di build (rigenerati con `npm run build`) ---
+dist
+**/dist
+build
+**/build
+*.tsbuildinfo
+.vite
+**/.vite
+
+# --- Version control e CI ---
+.git
+.gitignore
+.github
+.gitattributes
+
+# --- Deploy / infra (non servono per compilare; evita invalidazioni inutili) ---
+deploy
+scripts
+
+# --- Documentazione e file non necessari all'immagine ---
+docs
+readme.md
+LICENSE
+.editorconfig
+.nvmrc
+
+# --- Env e segreti: MAI nel context di build ---
+.env
+.env.*
+**/.env
+**/.env.*
+!**/.env.example
+
+# --- Dati runtime, log, cache, backup ---
+data
+**/data
+logs
+**/logs
+*.log
+.cache
+coverage
+.nyc_output
+test-results
+playwright-report
+*.sqlite
+*.db
+
+# --- Editor / OS ---
+.vscode
+.idea
+.DS_Store
+Thumbs.db

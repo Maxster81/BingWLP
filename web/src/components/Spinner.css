@@ -1,0 +1,14 @@
+.bwp-spinner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bwp-spinner__ring {
+  display: block;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.16);
+  border-top-color: var(--bwp-accent-1);
+  border-right-color: var(--bwp-accent-2);
+  animation: bwp-spin 0.75s linear infinite;
+}
