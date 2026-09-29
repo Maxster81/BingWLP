@@ -230,9 +230,7 @@ export function ThemeDetail({
             <ResolutionPicker resolutions={resolutions} value={resolutionKey} onChange={onResolutionChange} />
             <DownloadButton
               image={currentImage}
-              resolutions={resolutions}
               resolutionKey={resolutionKey}
-              onResolutionChange={onResolutionChange}
               onNotify={onNotify}
               variant="primary"
               label={t.downloadNow}

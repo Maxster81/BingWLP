@@ -273,14 +273,7 @@ export function Lightbox({
           </div>
           <div className="bwp-lightbox__controls">
             <ResolutionPicker resolutions={resolutions} value={resolutionKey} onChange={onResolutionChange} />
-            <DownloadButton
-              image={current}
-              resolutions={resolutions}
-              resolutionKey={resolutionKey}
-              onResolutionChange={onResolutionChange}
-              onNotify={onNotify}
-              variant="primary"
-            />
+            <DownloadButton image={current} resolutionKey={resolutionKey} onNotify={onNotify} variant="primary" />
           </div>
         </div>
       </div>
