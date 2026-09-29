@@ -53,9 +53,12 @@ RUN npm run build
 # Pruning delle devDependencies: al livello root di un monorepo npm workspaces
 # `npm prune --omit=dev` rimuove le devDeps di TUTTI i workspace lasciando le
 # runtime (fastify, zod, ...). Va eseguito DOPO la build, ovviamente.
+# Verifica post-build (test -f/-d: se mancano gli artefatti la build fallisce qui)
+# e rimozione dei sourcemap (non servono a runtime, appesantiscono l'immagine).
 RUN npm prune --omit=dev \
-
-
+    && test -f server/dist/index.js \
+    && test -d web/dist \
+    && rm -f server/dist/*.map web/dist/assets/*.map
 # -----------------------------------------------------------------------------
 # STAGE 2 — runtime: solo artefatti + dipendenze di produzione
 # -----------------------------------------------------------------------------
@@ -114,7 +117,3 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
 
 ENTRYPOINT ["dumb-init", "--"]
 CMD ["node", "server/dist/index.js"]
-
-    && test -f server/dist/index.js \
-    && test -d web/dist \
-    && rm -f server/dist/*.map web/dist/assets/*.map
