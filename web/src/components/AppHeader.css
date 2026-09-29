@@ -144,51 +144,9 @@
 
 .bwp-search__input::-webkit-search-cancel-button {
   display: none;
-
-/* --- Selettore mercato --- */
-.bwp-market {
-  position: relative;
-  display: flex;
-  align-items: center;
 }
 
-.bwp-market__label {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-}
-
-.bwp-market__select {
-  appearance: none;
-  min-height: 42px;
-  min-width: 168px;
-  padding: 0.5rem 2.1rem 0.5rem 0.9rem;
-  border-radius: var(--bwp-radius-pill);
-  border: 1px solid var(--bwp-border);
-  background: rgba(0, 0, 0, 0.28);
-  color: var(--bwp-text);
-  font-size: var(--bwp-font-size-sm);
-  cursor: pointer;
-  transition: border-color var(--bwp-dur) var(--bwp-ease), background-color var(--bwp-dur) var(--bwp-ease);
-}
-
-.bwp-market__select:hover {
-  border-color: var(--bwp-border-accent);
-  background: rgba(129, 140, 248, 0.16);
-}
-
-.bwp-market__chevron {
-  position: absolute;
-  right: 0.7rem;
-  display: grid;
-  place-items: center;
-  color: var(--bwp-text-muted);
-  pointer-events: none;
-}
-
+/* --- Selettore mercato (componente custom: vedi MarketPicker.tsx/.css) --- */
 /* --- Switch "solo novità" --- */
 .bwp-switch {
   display: inline-flex;
@@ -271,15 +229,10 @@
     max-width: none;
   }
 
-  .bwp-market__select {
-    min-width: 132px;
-  }
 
   .bwp-switch__text {
     display: none;
   }
-}
-
 }
 
 .bwp-search__clear {

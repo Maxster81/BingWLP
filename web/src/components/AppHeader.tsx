@@ -1,7 +1,7 @@
-import type { ChangeEvent } from 'react';
 import type { Market, MarketCode } from '../api/types';
 import { t } from '../lib/i18n';
 import { Icon } from './Icon';
+import { MarketPicker } from './MarketPicker';
 import './AppHeader.css';
 
 export type AppHeaderProps = {
@@ -31,10 +31,6 @@ export function AppHeader({
   homeHref,
   context,
 }: AppHeaderProps) {
-  const handleMarket = (event: ChangeEvent<HTMLSelectElement>): void => {
-    onMarketChange(event.currentTarget.value);
-  };
-
   return (
     <header className="bwp-header">
       <div className="bwp-header__inner">
@@ -80,30 +76,7 @@ export function AppHeader({
             ) : null}
           </div>
 
-          <div className="bwp-market">
-            <label className="bwp-market__label" htmlFor="bwp-market-select">
-              {t.marketLabel}
-            </label>
-            <select
-              id="bwp-market-select"
-              className="bwp-market__select"
-              value={market ?? ''}
-              onChange={handleMarket}
-              title={t.marketHint}
-            >
-              {market === null || markets.some((item) => item.code === market) ? null : (
-                <option value={market}>{market}</option>
-              )}
-              {markets.map((item) => (
-                <option key={item.code} value={item.code}>
-                  {`${item.flag} ${item.name}`}
-                </option>
-              ))}
-            </select>
-            <span className="bwp-market__chevron" aria-hidden="true">
-              <Icon name="chevron-down" size={16} />
-            </span>
-          </div>
+          <MarketPicker markets={markets} value={market} onChange={onMarketChange} />
 
           <label className="bwp-switch" title={t.onlyNewHint}>
             <input
