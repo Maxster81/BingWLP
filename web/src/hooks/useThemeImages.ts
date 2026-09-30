@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 import { api, ApiError } from '../api/client';
 import type { MarketCode, ThemeImagesResponse, ThemeKey } from '../api/types';
 import { t } from '../lib/i18n';
@@ -39,25 +39,31 @@ export function clearThemeImagesCache(): void {
 export function useThemeImages(
   market: MarketCode | null,
   themeKey: ThemeKey | null,
+  refreshNonce = 0,
 ): AsyncState<ThemeImagesResponse> {
   const enabled = market !== null && themeKey !== null;
-  const cached = peekThemeImages(market, themeKey);
+  const cached = refreshNonce === 0 ? peekThemeImages(market, themeKey) : null;
+  const lastNonceRef = useRef(refreshNonce);
 
   const fetcher = useCallback(
     (signal: AbortSignal): Promise<ThemeImagesResponse> => {
       if (market === null || themeKey === null) {
         return Promise.reject(new ApiError('BAD_REQUEST', t.errorImages, 400));
       }
+      const forceRefresh = refreshNonce !== lastNonceRef.current;
+      lastNonceRef.current = refreshNonce;
       const key = cacheKeyOf(market, themeKey);
-      const hit = imageCache.get(key);
-      if (hit) return Promise.resolve(hit);
-      return api.getThemeImages(market, themeKey, signal).then((response) => {
+      if (!forceRefresh) {
+        const hit = imageCache.get(key);
+        if (hit) return Promise.resolve(hit);
+      }
+      return api.getThemeImages(market, themeKey, signal, forceRefresh).then((response) => {
         imageCache.set(key, response);
         return response;
       });
     },
-    [market, themeKey],
+    [market, themeKey, refreshNonce],
   );
 
-  return useFetch<ThemeImagesResponse>(fetcher, [market, themeKey], { enabled, initialData: cached });
+  return useFetch<ThemeImagesResponse>(fetcher, [market, themeKey, refreshNonce], { enabled, initialData: cached });
 }

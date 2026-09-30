@@ -29,6 +29,8 @@ export type ThemeDetailProps = {
   onCloseLightbox: () => void;
   onBack: () => void;
   homeHref: string;
+  /** Cambia quando l'utente preme "Aggiorna": forza il refetch con bypass cache. */
+  refreshNonce?: number;
 };
 
 /** Dettaglio tema: breadcrumb, hero, carosello, miniature, metadata, download e lightbox. */
@@ -45,8 +47,9 @@ export function ThemeDetail({
   onCloseLightbox,
   onBack,
   homeHref,
+  refreshNonce = 0,
 }: ThemeDetailProps) {
-  const { data, error, loading, reload } = useThemeImages(market, themeKey);
+  const { data, error, loading, reload } = useThemeImages(market, themeKey, refreshNonce);
   const images = data?.images ?? [];
   const total = images.length;
   const summary = data?.theme ?? null;

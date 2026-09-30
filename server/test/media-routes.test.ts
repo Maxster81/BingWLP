@@ -25,12 +25,12 @@ function capturingFetch(options: { status?: number; headers?: Record<string, str
 }
 
 describe('GET /api/image', () => {
-  it('302 verso il CDN con w/h e Cache-Control immutable', async () => {
+  it('302 verso il CDN con w/h e Cache-Control breve (la posizione ruota ogni giorno)', async () => {
     const app = await buildTestApp(new FakeBingClient());
     const res = await app.inject({ url: '/api/image?theme=travel&i=0&w=800&h=450' });
     expect(res.statusCode).toBe(302);
     expect(res.headers.location).toBe(`${CDN_BASE}?id=${TRAVEL_ID}&w=800&h=450`);
-    expect(res.headers['cache-control']).toBe('public, max-age=2592000, immutable');
+    expect(res.headers['cache-control']).toBe('public, max-age=900');
     await app.close();
   });
 
@@ -84,7 +84,7 @@ describe('GET /api/image', () => {
     const res = await app.inject({ url: '/api/image?theme=travel&i=0&w=800&h=450&mode=stream' });
     expect(res.statusCode).toBe(200);
     expect(res.headers['content-type']).toBe('image/jpeg');
-    expect(res.headers['cache-control']).toBe('public, max-age=2592000, immutable');
+    expect(res.headers['cache-control']).toBe('public, max-age=900');
     expect(res.body).toBe('fake-jpeg-bytes');
     expect(calls[0]).toBe(`${CDN_BASE}?id=${TRAVEL_ID}&w=800&h=450`);
     await app.close();

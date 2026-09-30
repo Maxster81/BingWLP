@@ -90,13 +90,19 @@ export function resolutionsUrl(): string {
 }
 
 /** `GET /api/themes?mkt=..` */
-export function themesUrl(market?: MarketCode | null): string {
-  return withQuery(`${API_BASE}/themes`, [['mkt', market ?? undefined]]);
+export function themesUrl(market?: MarketCode | null, refresh = false): string {
+  return withQuery(`${API_BASE}/themes`, [
+    ['mkt', market ?? undefined],
+    ['refresh', refresh ? '1' : undefined],
+  ]);
 }
 
-/** `GET /api/themes/{key}/images?mkt=..` */
-export function themeImagesUrl(market: MarketCode | null, themeKey: ThemeKey): string {
-  return withQuery(`${API_BASE}/themes/${encodeURIComponent(themeKey)}/images`, [['mkt', market ?? undefined]]);
+/** `GET /api/themes/{key}/images?mkt=..` (con `refresh=1` opzionale per bypassare la cache). */
+export function themeImagesUrl(market: MarketCode | null, themeKey: ThemeKey, refresh = false): string {
+  return withQuery(`${API_BASE}/themes/${encodeURIComponent(themeKey)}/images`, [
+    ['mkt', market ?? undefined],
+    ['refresh', refresh ? '1' : undefined],
+  ]);
 }
 
 /** URL assoluto del documento corrente + percorso relativo (per `window.location.assign`). */

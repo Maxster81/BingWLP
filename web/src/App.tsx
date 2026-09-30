@@ -12,6 +12,7 @@ import { Toast } from './components/Toast';
 import { useConfig } from './hooks/useConfig';
 import { useHashRoute } from './hooks/useHashRoute';
 import { STORAGE_KEYS, useLocalStorage } from './hooks/useLocalStorage';
+import { clearThemeImagesCache } from './hooks/useThemeImages';
 import { useThemes } from './hooks/useThemes';
 import { formatDate, normalizeText } from './lib/format';
 import { t } from './lib/i18n';
@@ -44,6 +45,8 @@ export default function App() {
   const [query, setQuery] = useState('');
   const [onlyNew, setOnlyNew] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  const [refreshNonce, setRefreshNonce] = useState(0);
+  const [refreshing, setRefreshing] = useState(false);
 
   const notify = useCallback((message: string) => setToast(message), []);
   const dismissToast = useCallback(() => setToast(null), []);
@@ -55,7 +58,7 @@ export default function App() {
     if (market !== null && market !== storedMarket) setStoredMarket(market);
   }, [market, storedMarket, setStoredMarket]);
 
-  const themes = useThemes(market);
+  const themes = useThemes(market, refreshNonce);
 
   const resolutions = useMemo(() => config.data?.resolutions ?? [], [config.data]);
   const resolutionKey = useMemo(() => {
@@ -119,6 +122,18 @@ export default function App() {
     setOnlyNew(false);
   }, []);
 
+  const handleRefresh = useCallback(() => {
+    if (refreshing) return;
+    // Svuota la cache in-memory del frontend: il refetch passera' davvero in rete.
+    clearThemeImagesCache();
+    setRefreshing(true);
+    setRefreshNonce((n) => n + 1);
+    notify(t.refreshDone);
+    // Lo spinner resta per un breve giro minimo (feedback visivo) poi si ferma da solo:
+    // gli hook reagiscono al nonce e ricaricano con refresh=1.
+    window.setTimeout(() => setRefreshing(false), 1200);
+  }, [refreshing, notify]);
+
   const homeHref = routeHref({ kind: 'themes', market });
   const themeRow =
     route.kind === 'theme' ? themes.data?.themes.find((item) => item.key === route.themeKey) ?? null : null;
@@ -151,6 +166,7 @@ export default function App() {
         onCloseLightbox={() => navigate(themeRoute(route.themeKey, market, null))}
         onBack={goHome}
         homeHref={homeHref}
+        refreshNonce={refreshNonce}
       />
     );
   } else if (themes.loading && themes.data === null) {
@@ -222,6 +238,8 @@ export default function App() {
         onOnlyNewChange={setOnlyNew}
         onHome={goHome}
         homeHref={homeHref}
+        onRefresh={handleRefresh}
+        refreshing={refreshing}
         context={route.kind === 'theme' ? route.themeKey : undefined}
       />
 

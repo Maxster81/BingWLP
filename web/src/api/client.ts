@@ -93,12 +93,12 @@ export const api = {
     return request<ConfigResponse>(configUrl(), { signal });
   },
 
-  getThemes(market: MarketCode, signal?: AbortSignal): Promise<ThemeListResponse> {
-    return request<ThemeListResponse>(themesUrl(market), { signal });
+  getThemes(market: MarketCode, signal?: AbortSignal, refresh = false): Promise<ThemeListResponse> {
+    return request<ThemeListResponse>(themesUrl(market, refresh), { signal });
   },
 
-  getThemeImages(market: MarketCode, themeKey: ThemeKey, signal?: AbortSignal): Promise<ThemeImagesResponse> {
-    return request<ThemeImagesResponse>(themeImagesUrl(market, themeKey), { signal });
+  getThemeImages(market: MarketCode, themeKey: ThemeKey, signal?: AbortSignal, refresh = false): Promise<ThemeImagesResponse> {
+    return request<ThemeImagesResponse>(themeImagesUrl(market, themeKey, refresh), { signal });
   },
 
   getResolutions(signal?: AbortSignal): Promise<ResolutionsResponse> {

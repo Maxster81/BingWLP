@@ -7,7 +7,7 @@ import {
   MIN_QUALITY,
 } from '../domain/resolutions';
 import { parseOrBadRequest } from '../errors';
-import { buildCdnUrl, buildDownloadFilename, describeSize, sendCdnStream, STREAM_CACHE_CONTROL } from './media';
+import { buildCdnUrl, buildDownloadFilename, describeSize, REDIRECT_CACHE_CONTROL, sendCdnStream } from './media';
 import { marketSchema, refreshSchema } from './queries';
 import type { RouteDeps } from './types';
 
@@ -57,7 +57,7 @@ export function registerImageRoutes(app: FastifyInstance, deps: RouteDeps): void
     const download = query.dl === true;
     if (query.mode !== 'stream' && !download) {
       return reply
-        .header('cache-control', STREAM_CACHE_CONTROL)
+        .header('cache-control', REDIRECT_CACHE_CONTROL)
         .header('location', location)
         .code(302)
         .send();

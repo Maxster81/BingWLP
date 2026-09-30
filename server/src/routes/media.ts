@@ -3,8 +3,11 @@ import type { FastifyReply } from 'fastify';
 import { upstreamError, upstreamTimeout, upstreamUnavailable } from '../errors';
 import { slugify } from '../lib/slug';
 
-/** Cache-Control per immagini/redirect (30 giorni, immutable). */
-export const STREAM_CACHE_CONTROL = 'public, max-age=2592000, immutable';
+/** Cache per redirect 302 e stream: breve (15 min). L'URL /api/image?i=N e' una
+ *  POSIZIONE LOGICA nel tema (domani i=0 sara' un'altra immagine): MAI immutable qui.
+ *  I byte finali restano cachabili a lungo da Bing (l'id nell'URL CDN e' immutabile). */
+export const REDIRECT_CACHE_CONTROL = 'public, max-age=900';
+export const STREAM_CACHE_CONTROL = 'public, max-age=900';
 export const DEFAULT_IMAGE_CONTENT_TYPE = 'image/jpeg';
 /**
  * Timeout per gli stream dal CDN: più generoso di quello delle API JSON perché

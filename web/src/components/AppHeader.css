@@ -147,6 +147,69 @@
 }
 
 /* --- Selettore mercato (componente custom: vedi MarketPicker.tsx/.css) --- */
+/* --- Bottone refresh --- */
+.bwp-refresh {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--bwp-space-2);
+  min-height: 42px;
+  padding: 0.32rem 0.85rem 0.32rem 0.75rem;
+  border-radius: var(--bwp-radius-pill);
+  border: 1px solid var(--bwp-border);
+  background: rgba(0, 0, 0, 0.24);
+  color: var(--bwp-text-soft);
+  font-size: var(--bwp-font-size-xs);
+  font-weight: 600;
+  transition: border-color var(--bwp-dur) var(--bwp-ease), background-color var(--bwp-dur) var(--bwp-ease);
+}
+
+.bwp-refresh:hover:not(:disabled) {
+  border-color: var(--bwp-border-accent);
+  background: rgba(129, 140, 248, 0.16);
+  color: var(--bwp-text);
+}
+
+.bwp-refresh:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.bwp-refresh:focus-visible {
+  outline: none;
+  box-shadow: var(--bwp-focus-ring);
+}
+
+.bwp-refresh__icon {
+  display: grid;
+  place-items: center;
+}
+
+.bwp-refresh__icon.is-spinning {
+  animation: bwp-refresh-spin 0.9s linear infinite;
+}
+
+@keyframes bwp-refresh-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bwp-refresh__icon.is-spinning {
+    animation: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .bwp-refresh__text {
+    display: none;
+  }
+
+  .bwp-refresh {
+    padding-inline: 0.7rem;
+  }
+}
+
 /* --- Switch "solo novità" --- */
 .bwp-switch {
   display: inline-flex;

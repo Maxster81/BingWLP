@@ -203,6 +203,26 @@ describe('GET /api/themes/:key/images', () => {
   });
 });
 
+describe('Cache-Control delle API JSON', () => {
+  it('le liste che ruotano ogni giorno sono no-store', async () => {
+    const app = await buildTestApp(new FakeBingClient());
+    const themes = await app.inject({ url: '/api/themes' });
+    expect(themes.headers['cache-control']).toBe('no-store');
+    const images = await app.inject({ url: '/api/themes/travel/images' });
+    expect(images.headers['cache-control']).toBe('no-store');
+    await app.close();
+  });
+
+  it('config e resolutions (statiche fino al deploy) hanno cache breve esplicita', async () => {
+    const app = await buildTestApp(new FakeBingClient());
+    const config = await app.inject({ url: '/api/config' });
+    expect(config.headers['cache-control']).toBe('public, max-age=3600');
+    const resolutions = await app.inject({ url: '/api/resolutions' });
+    expect(resolutions.headers['cache-control']).toBe('public, max-age=3600');
+    await app.close();
+  });
+});
+
 describe('rotte inesistenti', () => {
   it('404 JSON con code NOT_FOUND per /api/* sconosciute', async () => {
     const app = await buildTestApp(new FakeBingClient());

@@ -192,8 +192,14 @@ Query opzionali:
   `stream` → il backend fa da proxy e restituisce i byte (fallback se il CDN blocca hotlink).
 - `dl=1`: forza il download (`Content-Disposition: attachment`).
 
-Risposte: `302` con `Location` al CDN (default) oppure `200` con `Content-Type: image/jpeg`
-e `Cache-Control: public, max-age=2592000, immutable`.
+Risposte: `302` con `Location` al CDN (default) oppure `200` con `Content-Type: image/jpeg`.
+
+Cache-Control: `public, max-age=900` (15 min) sia per il redirect che per lo stream.
+L'URL `/api/image?i=N` e' una posizione logica nel tema (domani `i=0` sara' un'altra
+immagine), quindi NON deve mai essere `immutable`: il browser torna a chiedere il redirect
+dopo pochi minuti e vede la rotazione giornaliera. I byte finali restano cachabili a lungo
+da Bing (l'id nell'URL del CDN e' immutabile). Le API JSON che cambiano ogni giorno
+(`/api/themes`, `/api/themes/{key}/images`) rispondono invece `Cache-Control: no-store`.
 
 ## 6. `GET /api/download`
 

@@ -14,6 +14,10 @@ export type AppHeaderProps = {
   onOnlyNewChange: (value: boolean) => void;
   onHome: () => void;
   homeHref: string;
+  /** Forza il ricaricamento dei contenuti (bypass cache server + locale). */
+  onRefresh: () => void;
+  /** True mentre un refresh e' in corso (disabilita il bottone). */
+  refreshing: boolean;
   /** Mostrato come sottotitolo/contesto (es. nome del tema aperto). */
   context?: string;
 };
@@ -29,6 +33,8 @@ export function AppHeader({
   onOnlyNewChange,
   onHome,
   homeHref,
+  onRefresh,
+  refreshing,
   context,
 }: AppHeaderProps) {
   return (
@@ -77,6 +83,20 @@ export function AppHeader({
           </div>
 
           <MarketPicker markets={markets} value={market} onChange={onMarketChange} />
+
+          <button
+            type="button"
+            className="bwp-refresh"
+            onClick={onRefresh}
+            disabled={refreshing}
+            title={t.refreshHint}
+            aria-label={t.refreshLabel}
+          >
+            <span className={refreshing ? 'bwp-refresh__icon is-spinning' : 'bwp-refresh__icon'} aria-hidden="true">
+              <Icon name="retry" size={16} />
+            </span>
+            <span className="bwp-refresh__text">{t.refreshLabel}</span>
+          </button>
 
           <label className="bwp-switch" title={t.onlyNewHint}>
             <input

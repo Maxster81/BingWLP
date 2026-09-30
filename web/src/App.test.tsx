@@ -73,6 +73,24 @@ describe('App (integrazione con fetch mockato)', () => {
     expect(screen.getAllByRole('img', { name: 'Panorama 4' })).toHaveLength(2);
   });
 
+  it('il pulsante Aggiorna ricarica i temi con refresh=1 (bypass cache)', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    // attende il primo caricamento
+    await screen.findByRole('link', { name: t.openTheme('Viaggi') });
+
+    const fetchMock = vi.mocked(fetch);
+    fetchMock.mockClear();
+
+    await user.click(screen.getByRole('button', { name: t.refreshLabel }));
+
+    // deve partire una nuova chiamata a /api/themes con refresh=1
+    await screen.findByRole('link', { name: t.openTheme('Viaggi') });
+    const urls = fetchMock.mock.calls.map((c) => String(c[0]));
+    expect(urls.some((u) => u.includes('/api/themes') && u.includes('refresh=1'))).toBe(true);
+  });
+
   it('mostra lo stato di errore con "Riprova" se la configurazione fallisce', async () => {
     vi.stubGlobal(
       'fetch',
