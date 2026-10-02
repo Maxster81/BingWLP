@@ -25,7 +25,7 @@ function makeGallery(
   });
 }
 
-const TRAVEL_COVER = '/api/image?mkt=it-IT&theme=travel&i=0&w=800&h=450';
+const TRAVEL_COVER = '/api/image?mkt=it-IT&theme=travel&i=0&v=OBGA.Lock2017-B5_AF_DrakensbergGoldenGateNP_shutterstock_538817752&w=800&h=450';
 
 describe('Gallery.getThemes', () => {
   it('arricchisce ogni tema con imageCount e coverUrl (happy path)', async () => {
@@ -113,7 +113,9 @@ describe('Gallery.getThemeImages', () => {
     expect(result.images[0]?.id).toBe(
       'OBGA.Lock2017-B5_AF_DrakensbergGoldenGateNP_shutterstock_538817752',
     );
-    expect(result.images[2]?.urls.original).toBe('/api/image?mkt=it-IT&theme=travel&i=2');
+    expect(result.images[2]?.urls.original).toBe(
+      '/api/image?mkt=it-IT&theme=travel&i=2&v=OBGA.Lock2017-B6_SunwaptaFallsJasperNPAlbertaCA_shutterstock_497091511',
+    );
   });
 
   it('funziona con le key case-sensitive che contengono spazi', async () => {

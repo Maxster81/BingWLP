@@ -42,17 +42,24 @@ export type ImageUrlParams = {
   mode?: 'redirect' | 'stream';
   /** `dl=1`: forza `Content-Disposition: attachment`. */
   download?: boolean;
+  /**
+   * Cache-buster: id dell'immagine. `/api/image?i=N` è una posizione logica che ruota:
+   * cambiare `v` quando cambia l'immagine evita di riusare redirect 302 vecchi
+   * (anche `immutable`) rimasti in cache dal browser.
+   */
+  version?: string;
   /** Override della base (default `/api/image`). */
   base?: string;
 };
 
 /** `GET /api/image?mkt=..&theme=..&i=..&w=..&h=..` */
 export function imageUrl(params: ImageUrlParams): string {
-  const { theme, index, market, width, height, quality, mode, download, base = `${API_BASE}/image` } = params;
+  const { theme, index, market, width, height, quality, mode, download, version, base = `${API_BASE}/image` } = params;
   return withQuery(base, [
     ['mkt', market ?? undefined],
     ['theme', theme],
     ['i', index],
+    ['v', version],
     ['w', width],
     ['h', height],
     ['qlt', quality],

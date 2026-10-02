@@ -8,6 +8,9 @@ import {
   travelImagesResponse,
 } from './fixtures';
 
+/** Id della prima immagine travel nel fixture: cache-buster `v` negli URL. */
+const TRAVEL_ID_0 = 'OBGA.Lock2017-B5_AF_DrakensbergGoldenGateNP_shutterstock_538817752';
+
 function travelCtx(overrides: Partial<ThemeImageContext> = {}): ThemeImageContext {
   return {
     themeKey: 'travel',
@@ -97,18 +100,18 @@ describe('mapThemeImages', () => {
   it('costruisce URL relativi con le dimensioni del contratto e downloadBase', () => {
     const images = mapThemeImages(travelImagesResponse, travelCtx());
     expect(images[0]?.urls).toEqual({
-      thumb: '/api/image?mkt=it-IT&theme=travel&i=0&w=480&h=270',
-      card: '/api/image?mkt=it-IT&theme=travel&i=0&w=800&h=450',
-      preview: '/api/image?mkt=it-IT&theme=travel&i=0&w=1280&h=720',
-      full: '/api/image?mkt=it-IT&theme=travel&i=0&w=1920&h=1080',
-      original: '/api/image?mkt=it-IT&theme=travel&i=0',
+      thumb: `/api/image?mkt=it-IT&theme=travel&i=0&v=${TRAVEL_ID_0}&w=480&h=270`,
+      card: `/api/image?mkt=it-IT&theme=travel&i=0&v=${TRAVEL_ID_0}&w=800&h=450`,
+      preview: `/api/image?mkt=it-IT&theme=travel&i=0&v=${TRAVEL_ID_0}&w=1280&h=720`,
+      full: `/api/image?mkt=it-IT&theme=travel&i=0&v=${TRAVEL_ID_0}&w=1920&h=1080`,
+      original: `/api/image?mkt=it-IT&theme=travel&i=0&v=${TRAVEL_ID_0}`,
     });
     expect(images[2]?.downloadBase).toBe('/api/download?mkt=it-IT&theme=travel&i=2');
   });
 
   it('percent-encoda le key con spazi (case-sensitive, \"wild animal\")', () => {
     const images = mapThemeImages(travelImagesResponse, travelCtx({ themeKey: 'wild animal' }));
-    expect(images[0]?.urls.card).toBe('/api/image?mkt=it-IT&theme=wild%20animal&i=0&w=800&h=450');
+    expect(images[0]?.urls.card).toBe(`/api/image?mkt=it-IT&theme=wild%20animal&i=0&v=${TRAVEL_ID_0}&w=800&h=450`);
     expect(images[0]?.downloadBase).toBe('/api/download?mkt=it-IT&theme=wild%20animal&i=0');
   });
 
@@ -117,7 +120,7 @@ describe('mapThemeImages', () => {
     expect(images).toHaveLength(2);
     expect(images[0]?.animated).toEqual({
       name: 'Petals',
-      posterUrl: '/api/image?mkt=it-IT&theme=animated&i=0&w=1920&h=1080',
+      posterUrl: '/api/image?mkt=it-IT&theme=animated&i=0&v=OBGA.Animated_Petals.jpg&w=1920&h=1080',
       videoUrl:
         'https://download.microsoft.com/download/7cda3eda-ffdb-4921-ac2c-9b4050888f77/petals-video.mp4',
     });
@@ -157,7 +160,7 @@ describe('mapThemeImages — casi limite', () => {
       sourceType: '',
       animated: null,
     });
-    expect(images[2]?.urls.original).toBe('/api/image?mkt=it-IT&theme=travel&i=2');
+    expect(images[2]?.urls.original).toBe('/api/image?mkt=it-IT&theme=travel&i=2&v=OBGA.No_fields');
   });
 
   it('searchUrl: primo SearchUrls non vuoto, con fallback su copyrightlink', () => {
@@ -177,7 +180,7 @@ describe('mapThemeImages — casi limite', () => {
     expect(images[3]?.animated).toBeNull();
     expect(images[4]?.animated).toEqual({
       name: 'Invertito',
-      posterUrl: '/api/image?mkt=it-IT&theme=travel&i=4&w=1920&h=1080',
+      posterUrl: '/api/image?mkt=it-IT&theme=travel&i=4&v=OBGA.Reversed_assets&w=1920&h=1080',
       videoUrl: 'https://example.com/movie.mp4',
     });
   });

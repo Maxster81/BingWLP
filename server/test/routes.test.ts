@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { buildTestApp, FakeBingClient, networkFailure, testConfig } from './fixtures';
 
-const TRAVEL_COVER = '/api/image?mkt=it-IT&theme=travel&i=0&w=800&h=450';
+const TRAVEL_COVER = '/api/image?mkt=it-IT&theme=travel&i=0&v=OBGA.Lock2017-B5_AF_DrakensbergGoldenGateNP_shutterstock_538817752&w=800&h=450';
 
 describe('GET /api/health', () => {
   it('riporta versione, uptime, upstream e statistiche cache', async () => {
@@ -175,7 +175,7 @@ describe('GET /api/themes/:key/images', () => {
     expect(body.images[0]).toMatchObject({
       index: 0,
       id: 'OBGA.Lock2017-B5_AF_DrakensbergGoldenGateNP_shutterstock_538817752',
-      urls: { card: '/api/image?mkt=it-IT&theme=travel&i=0&w=800&h=450' },
+      urls: { card: '/api/image?mkt=it-IT&theme=travel&i=0&v=OBGA.Lock2017-B5_AF_DrakensbergGoldenGateNP_shutterstock_538817752&w=800&h=450' },
     });
     await app.close();
   });

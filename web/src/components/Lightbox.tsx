@@ -155,7 +155,14 @@ export function Lightbox({
   if (!current) return null;
 
   // A 2× chiediamo al backend una variante più grande (crop lato Bing).
-  const zoomSrc = api.imageUrl({ theme: themeKey, index: current.index, market, width: 2560, height: 1440 });
+  const zoomSrc = api.imageUrl({
+    theme: themeKey,
+    index: current.index,
+    market,
+    width: 2560,
+    height: 1440,
+    version: current.id,
+  });
   const imageSrc = zoom > 1 ? zoomSrc : current.urls.full;
 
   return (
