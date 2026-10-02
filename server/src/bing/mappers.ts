@@ -94,7 +94,7 @@ export function extractImageId(urlbase: string | null | undefined): string | nul
 }
 
 function mapImage(item: BingImage, id: string, index: number, ctx: ThemeImageContext): WallpaperImage {
-  const urls = buildImageUrls(ctx.market, ctx.themeKey, index);
+  const urls = buildImageUrls(ctx.market, ctx.themeKey, index, id);
   return {
     index,
     id,
@@ -117,8 +117,15 @@ function mapImage(item: BingImage, id: string, index: number, ctx: ThemeImageCon
   };
 }
 
-function buildImageUrls(market: string, themeKey: string, index: number): WallpaperImageUrls {
-  const base = `/api/image?mkt=${encodeURIComponent(market)}&theme=${encodeURIComponent(themeKey)}&i=${index}`;
+function buildImageUrls(market: string, themeKey: string, index: number, id: string): WallpaperImageUrls {
+  // `v` = id immagine: cache-buster. L'URL `/api/image?i=N` è una posizione logica che
+  // cambia ogni giorno; i browser possono avere in cache un VECCHIO redirect 302 con
+  // `immutable` (emesso prima del fix delle cache) valido fino a 30 giorni. Cambiando
+  // la query quando cambia l'immagine, quella entry stantia non viene mai più usata.
+  // Il parametro è ignorato dalla route (zod scarta le chiavi sconosciute).
+  const base =
+    `/api/image?mkt=${encodeURIComponent(market)}&theme=${encodeURIComponent(themeKey)}&i=${index}` +
+    `&v=${encodeURIComponent(id)}`;
   return {
     thumb: `${base}&w=${SIZES.thumb.width}&h=${SIZES.thumb.height}`,
     card: `${base}&w=${SIZES.card.width}&h=${SIZES.card.height}`,
